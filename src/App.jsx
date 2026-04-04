@@ -1,9 +1,13 @@
 import React from 'react';
+import Dashboard from './views/Dashboard/Dashboard';
 
 function App() {
   return (
-    <h1>Hello World</h1>
-  )
+    <main className="container">
+      <Dashboard />
+    </main>
+  );
 }
 
 export default App;
+
