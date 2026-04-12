@@ -1,0 +1,61 @@
+.quizCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metadata {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.quizCard:hover .actions {
+  opacity: 1;
+}
+
+.actionButton {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.1s ease;
+}
+
+.actionButton:hover {
+  color: var(--text-primary);
+}
+
+.actionButton[aria-label="Delete Quiz"]:hover {
+  color: var(--danger-color);
+}
+
+@media (max-width: 640px) {
+  .actions {
+    opacity: 1; /* Always show on mobile since hover isn't reliable */
+  }
+}
