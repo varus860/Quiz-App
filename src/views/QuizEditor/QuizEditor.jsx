@@ -4,6 +4,7 @@ import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import Textarea from '../../components/Textarea/Textarea';
 import Toggle from '../../components/Toggle/Toggle';
+import { Trash2, Pencil, ChevronUp, ChevronDown, Plus, HelpCircle } from 'lucide-react';
 
 const QuizEditor = ({ quiz, onBack, onSave }) => {
   const isEditing = !!quiz;
@@ -13,7 +14,8 @@ const QuizEditor = ({ quiz, onBack, onSave }) => {
     description: '',
     timeLimit: 15,
     passingScore: 60,
-    showAnswers: true
+    showAnswers: true,
+    questions: []
   });
 
   useEffect(() => {
@@ -23,7 +25,8 @@ const QuizEditor = ({ quiz, onBack, onSave }) => {
         description: quiz.description || '',
         timeLimit: quiz.timeLimit || 15,
         passingScore: quiz.passingScore || 60,
-        showAnswers: quiz.showAnswers !== undefined ? quiz.showAnswers : true
+        showAnswers: quiz.showAnswers !== undefined ? quiz.showAnswers : true,
+        questions: quiz.questions || []
       });
     }
   }, [quiz]);
@@ -41,6 +44,40 @@ const QuizEditor = ({ quiz, onBack, onSave }) => {
       ...quiz,
       ...formData
     });
+  };
+
+  const handleAddQuestion = () => {
+    // Phase 10 will replace this with a modal
+    const newQuestion = {
+      id: Date.now().toString(),
+      prompt: 'Describe your question here...',
+      type: 'Multiple Choice',
+      choices: [],
+      correctAnswer: ''
+    };
+    setFormData(prev => ({
+      ...prev,
+      questions: [...prev.questions, newQuestion]
+    }));
+  };
+
+  const handleDeleteQuestion = (index) => {
+    if (confirm('Are you sure you want to delete this question?')) {
+      setFormData(prev => ({
+        ...prev,
+        questions: prev.questions.filter((_, i) => i !== index)
+      }));
+    }
+  };
+
+  const handleMoveQuestion = (index, direction) => {
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= formData.questions.length) return;
+
+    const newQuestions = [...formData.questions];
+    [newQuestions[index], newQuestions[newIndex]] = [newQuestions[newIndex], newQuestions[index]];
+    
+    setFormData(prev => ({ ...prev, questions: newQuestions }));
   };
 
   return (
@@ -114,12 +151,64 @@ const QuizEditor = ({ quiz, onBack, onSave }) => {
 
         {/* Right Panel: Question List */}
         <section className={styles.questionsPanel}>
-          <div className={styles.panelHeader}>
-            <h2 className={styles.sectionTitle}>Questions</h2>
-            <p className={styles.sectionDescription}>Add and manage questions for your quiz.</p>
-          </div>
-          <div className={styles.placeholderBox}>
-            Question List (Phase 9)
+          <div className={styles.questionsList}>
+            {formData.questions.length > 0 ? (
+              formData.questions.map((question, index) => (
+                <div key={question.id || index} className={styles.questionItem}>
+                  <div className={styles.questionIndex}>{index + 1}</div>
+                  <div className={styles.questionMain}>
+                    <div className={styles.questionHeader}>
+                      <span className={styles.questionType}>
+                        <HelpCircle size={14} />
+                        {question.type}
+                      </span>
+                    </div>
+                    <p className={styles.questionPrompt}>{question.prompt}</p>
+                  </div>
+                  <div className={styles.questionActions}>
+                    <div className={styles.reorderButtons}>
+                      <button 
+                        className={styles.actionBtn} 
+                        onClick={() => handleMoveQuestion(index, 'up')}
+                        disabled={index === 0}
+                        title="Move Up"
+                      >
+                        <ChevronUp size={18} />
+                      </button>
+                      <button 
+                        className={styles.actionBtn} 
+                        onClick={() => handleMoveQuestion(index, 'down')}
+                        disabled={index === formData.questions.length - 1}
+                        title="Move Down"
+                      >
+                        <ChevronDown size={18} />
+                      </button>
+                    </div>
+                    <div className={styles.mainActions}>
+                      <button className={`${styles.actionBtn} ${styles.editBtn}`} title="Edit Question">
+                        <Pencil size={18} />
+                      </button>
+                      <button 
+                        className={`${styles.actionBtn} ${styles.deleteBtn}`} 
+                        onClick={() => handleDeleteQuestion(index)}
+                        title="Delete Question"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={styles.placeholderBox}>
+                No questions added yet. Click the button below to start building your quiz.
+              </div>
+            )}
+            
+            <Button variant="outline" className={styles.addQuestionBtn} onClick={handleAddQuestion}>
+              <Plus size={18} />
+              Add Question
+            </Button>
           </div>
         </section>
       </div>
