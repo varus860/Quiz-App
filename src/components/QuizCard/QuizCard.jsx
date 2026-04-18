@@ -3,12 +3,12 @@ import { Pencil, Download, Trash2 } from 'lucide-react';
 import Card from '../Card/Card';
 import styles from './QuizCard.module.css';
 
-const QuizCard = ({ quiz, onEdit, onExport, onDelete }) => {
+const QuizCard = ({ quiz, onEdit, onExport, onDelete, onStart }) => {
   const { title, questionsCount, attempts, updatedAt, status } = quiz;
 
   return (
     <Card className={styles.quizCard}>
-      <div className={styles.content}>
+      <div className={styles.content} onClick={() => onStart(quiz)}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.metadata}>
           {questionsCount} Questions | {attempts} Attempts | Updated {updatedAt}

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Dashboard from './views/Dashboard/Dashboard';
 import QuizEditor from './views/QuizEditor/QuizEditor';
+import QuizRunner from './views/QuizRunner/QuizRunner';
+import QuizResults from './views/QuizResults/QuizResults';
 
 const INITIAL_QUIZZES = [
   {
@@ -13,7 +15,30 @@ const INITIAL_QUIZZES = [
     status: 'Completed',
     timeLimit: 30,
     passingScore: 70,
-    showAnswers: true
+    showAnswers: true,
+    questions: [
+      {
+        id: 'q1',
+        prompt: 'Which ancient civilization built the pyramids of Giza?',
+        choices: ['Ancient Greece', 'Mesopotamia', 'Ancient Egypt', 'The Roman Empire'],
+        correctAnswer: 2,
+        type: 'Multiple Choice'
+      },
+      {
+        id: 'q2',
+        prompt: 'The Code of Hammurabi is associated with which civilization?',
+        choices: ['Babylon', 'Ancient China', 'Indus Valley', 'The Maya'],
+        correctAnswer: 0,
+        type: 'Multiple Choice'
+      },
+      {
+        id: 'q3',
+        prompt: 'Which philosopher was a tutor to Alexander the Great?',
+        choices: ['Socrates', 'Plato', 'Aristotle', 'Epicurus'],
+        correctAnswer: 2,
+        type: 'Multiple Choice'
+      }
+    ]
   },
   {
     id: '2',
@@ -25,7 +50,16 @@ const INITIAL_QUIZZES = [
     status: 'Drafts',
     timeLimit: 20,
     passingScore: 60,
-    showAnswers: false
+    showAnswers: false,
+    questions: [
+      {
+        id: 'q1-alg',
+        prompt: 'Solve for x: 2x + 5 = 13',
+        choices: ['x = 4', 'x = 9', 'x = 3', 'x = 5'],
+        correctAnswer: 0,
+        type: 'Multiple Choice'
+      }
+    ]
   },
   {
     id: '3',
@@ -37,7 +71,16 @@ const INITIAL_QUIZZES = [
     status: 'Completed',
     timeLimit: 15,
     passingScore: 75,
-    showAnswers: true
+    showAnswers: true,
+    questions: [
+      {
+        id: 'q1-bio',
+        prompt: 'Which organelle is known as the powerhouse of the cell?',
+        choices: ['Nucleus', 'Mitochondria', 'Ribosome', 'Golgi Apparatus'],
+        correctAnswer: 1,
+        type: 'Multiple Choice'
+      }
+    ]
   },
   {
     id: '4',
@@ -49,7 +92,16 @@ const INITIAL_QUIZZES = [
     status: 'Completed',
     timeLimit: 25,
     passingScore: 80,
-    showAnswers: true
+    showAnswers: true,
+    questions: [
+      {
+        id: 'q1-lit',
+        prompt: 'In which city is "Romeo and Juliet" set?',
+        choices: ['Venice', 'Verona', 'Rome', 'Florence'],
+        correctAnswer: 1,
+        type: 'Multiple Choice'
+      }
+    ]
   },
   {
     id: '5',
@@ -61,14 +113,25 @@ const INITIAL_QUIZZES = [
     status: 'Drafts',
     timeLimit: 15,
     passingScore: 50,
-    showAnswers: false
-  }
+    showAnswers: false,
+    questions: [
+      {
+        id: 'q1-geo',
+        prompt: 'Which is the largest country by land area?',
+        choices: ['Canada', 'China', 'Russia', 'USA'],
+        correctAnswer: 2,
+        type: 'Multiple Choice'
+      }
+    ]
+  },
 ];
 
 function App() {
   const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
   const [currentView, setCurrentView] = useState('dashboard');
   const [editingQuiz, setEditingQuiz] = useState(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [quizResults, setQuizResults] = useState(null);
 
   const navigateToDashboard = () => {
     setCurrentView('dashboard');
@@ -78,6 +141,56 @@ function App() {
   const navigateToEditor = (quiz = null) => {
     setCurrentView('editor');
     setEditingQuiz(quiz);
+  };
+
+  const navigateToRunner = (quiz) => {
+    setCurrentView('runner');
+    setEditingQuiz(quiz);
+    setCurrentQuestionIndex(0);
+  };
+
+  const handleNextQuestion = () => {
+    if (editingQuiz && currentQuestionIndex < editingQuiz.questions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    }
+  };
+
+  const handlePrevQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
+  };
+
+  const handleSubmitQuiz = (userAnswers) => {
+    if (!editingQuiz) return;
+
+    const totalQuestions = editingQuiz.questions.length;
+    let correctCount = 0;
+
+    editingQuiz.questions.forEach(question => {
+      if (userAnswers[question.id] === question.correctAnswer) {
+        correctCount++;
+      }
+    });
+
+    const score = Math.round((correctCount / totalQuestions) * 100);
+
+    const results = {
+      score,
+      correctCount,
+      totalQuestions,
+      answers: userAnswers,
+      quiz: editingQuiz
+    };
+
+    // Update attempts in state
+    setQuizzes(prev => prev.map(q => q.id === editingQuiz.id ? {
+      ...q,
+      attempts: (q.attempts || 0) + 1
+    } : q));
+
+    setQuizResults(results);
+    setCurrentView('results');
   };
 
   const handleSaveQuiz = (quizData) => {
@@ -106,21 +219,55 @@ function App() {
     navigateToDashboard();
   };
 
+  const renderView = () => {
+    switch (currentView) {
+      case 'dashboard':
+        return (
+          <div className="container">
+            <Dashboard 
+              quizzes={quizzes}
+              onCreateQuiz={() => navigateToEditor()} 
+              onEditQuiz={navigateToEditor}
+              onStartQuiz={navigateToRunner}
+            />
+          </div>
+        );
+      case 'editor':
+        return (
+          <div className="container">
+            <QuizEditor 
+              quiz={editingQuiz} 
+              onBack={navigateToDashboard} 
+              onSave={handleSaveQuiz}
+            />
+          </div>
+        );
+      case 'runner':
+        return (
+          <QuizRunner 
+            quiz={editingQuiz}
+            currentQuestionIndex={currentQuestionIndex}
+            onExit={navigateToDashboard}
+            onNext={handleNextQuestion}
+            onPrev={handlePrevQuestion}
+            onSubmit={handleSubmitQuiz}
+          />
+        );
+      case 'results':
+        return (
+          <QuizResults 
+            results={quizResults}
+            onFinish={navigateToDashboard}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <main className="container">
-      {currentView === 'dashboard' ? (
-        <Dashboard 
-          quizzes={quizzes}
-          onCreateQuiz={() => navigateToEditor()} 
-          onEditQuiz={navigateToEditor} 
-        />
-      ) : (
-        <QuizEditor 
-          quiz={editingQuiz} 
-          onBack={navigateToDashboard} 
-          onSave={handleSaveQuiz}
-        />
-      )}
+    <main>
+      {renderView()}
     </main>
   );
 }

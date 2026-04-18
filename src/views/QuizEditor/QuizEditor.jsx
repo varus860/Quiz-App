@@ -5,6 +5,7 @@ import Input from '../../components/Input/Input';
 import Textarea from '../../components/Textarea/Textarea';
 import Toggle from '../../components/Toggle/Toggle';
 import { Trash2, Pencil, ChevronUp, ChevronDown, Plus, HelpCircle } from 'lucide-react';
+import QuestionModal from './components/QuestionModal/QuestionModal';
 
 const QuizEditor = ({ quiz, onBack, onSave }) => {
   const isEditing = !!quiz;
@@ -17,6 +18,10 @@ const QuizEditor = ({ quiz, onBack, onSave }) => {
     showAnswers: true,
     questions: []
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingQuestion, setEditingQuestion] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
     if (quiz) {
@@ -47,18 +52,36 @@ const QuizEditor = ({ quiz, onBack, onSave }) => {
   };
 
   const handleAddQuestion = () => {
-    // Phase 10 will replace this with a modal
-    const newQuestion = {
-      id: Date.now().toString(),
-      prompt: 'Describe your question here...',
-      type: 'Multiple Choice',
-      choices: [],
-      correctAnswer: ''
-    };
-    setFormData(prev => ({
-      ...prev,
-      questions: [...prev.questions, newQuestion]
-    }));
+    setEditingQuestion(null);
+    setEditingIndex(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditQuestion = (index) => {
+    setEditingQuestion(formData.questions[index]);
+    setEditingIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveQuestion = (questionData) => {
+    const newQuestions = [...formData.questions];
+    
+    if (editingIndex !== null) {
+      // Edit existing
+      newQuestions[editingIndex] = {
+        ...questionData,
+        id: editingQuestion.id // Preserve ID
+      };
+    } else {
+      // Add new
+      newQuestions.push({
+        ...questionData,
+        id: Date.now().toString()
+      });
+    }
+
+    setFormData(prev => ({ ...prev, questions: newQuestions }));
+    setIsModalOpen(false);
   };
 
   const handleDeleteQuestion = (index) => {
@@ -185,7 +208,11 @@ const QuizEditor = ({ quiz, onBack, onSave }) => {
                       </button>
                     </div>
                     <div className={styles.mainActions}>
-                      <button className={`${styles.actionBtn} ${styles.editBtn}`} title="Edit Question">
+                      <button 
+                        className={`${styles.actionBtn} ${styles.editBtn}`} 
+                        onClick={() => handleEditQuestion(index)}
+                        title="Edit Question"
+                      >
                         <Pencil size={18} />
                       </button>
                       <button 
@@ -212,6 +239,13 @@ const QuizEditor = ({ quiz, onBack, onSave }) => {
           </div>
         </section>
       </div>
+
+      <QuestionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveQuestion}
+        question={editingQuestion}
+      />
     </div>
   );
 };

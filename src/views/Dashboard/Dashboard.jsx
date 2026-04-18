@@ -3,10 +3,12 @@ import styles from './Dashboard.module.css';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import QuizCard from '../../components/QuizCard/QuizCard';
+import Modal from '../../components/Modal/Modal';
 
-const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz }) => {
+const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [pendingQuiz, setPendingQuiz] = useState(null);
 
   const filters = ['All', 'Drafts', 'Completed'];
 
@@ -22,6 +24,13 @@ const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz }) => {
   const handleEdit = (quiz) => onEditQuiz(quiz);
   const handleExport = (quiz) => console.log('Export quiz:', quiz.title);
   const handleDelete = (quiz) => console.log('Delete quiz:', quiz.title);
+  const handleStartRequest = (quiz) => setPendingQuiz(quiz);
+  const handleConfirmStart = () => {
+    if (pendingQuiz) {
+      onStartQuiz(pendingQuiz);
+      setPendingQuiz(null);
+    }
+  };
 
   return (
     <div className={styles.dashboard}>
@@ -67,6 +76,7 @@ const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz }) => {
                 onEdit={handleEdit}
                 onExport={handleExport}
                 onDelete={handleDelete}
+                onStart={handleStartRequest}
               />
             ))}
           </div>
@@ -77,6 +87,32 @@ const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz }) => {
           </div>
         )}
       </section>
+
+      <Modal
+        isOpen={!!pendingQuiz}
+        onClose={() => setPendingQuiz(null)}
+        title="Ready to Start?"
+        footer={
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', width: '100%' }}>
+            <Button variant="ghost" onClick={() => setPendingQuiz(null)}>Cancel</Button>
+            <Button variant="primary" onClick={handleConfirmStart}>Start Quiz</Button>
+          </div>
+        }
+      >
+        {pendingQuiz && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ borderLeft: '4px solid var(--color-accent)', paddingLeft: '16px' }}>
+              <h2 style={{ fontSize: '1.25rem', margin: '0 0 8px 0' }}>{pendingQuiz.title}</h2>
+              <p style={{ color: 'var(--color-text-secondary)', margin: 0, lineHeight: '1.5' }}>
+                {pendingQuiz.description || 'No description provided.'}
+              </p>
+            </div>
+            <div style={{ background: 'var(--color-bg)', padding: '12px 16px', borderRadius: '8px', fontSize: '0.875rem' }}>
+              <strong>Rules:</strong> {pendingQuiz.timeLimit} minutes • {pendingQuiz.passingScore}% to pass
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

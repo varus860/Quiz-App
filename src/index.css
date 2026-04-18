@@ -1,16 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-color: #F7FAF6;
-  --surface-color: #F0F6EF;
-  --border-color: #E6EDE4;
-  --text-secondary: #6B7A6F;
-  --text-primary: #17221A;
-  --accent-color: #4F8A66;
-  --accent-hover: #3E6E51;
-  --danger-color: #D04444;
-  --success-color: #16A34A;
+  /* Design Tokens - Standard Names */
+  --color-bg: #F7FAF6;
+  --color-surface: #F0F6EF;
+  --color-border: #E6EDE4;
+  --color-text-secondary: #6B7A6F;
+  --color-text-primary: #17221A;
+  --color-accent: #4F8A66;
+  --color-accent-hover: #3E6E51;
+  --color-danger: #D04444;
+  --color-success: #16A34A;
 
+  /* Aliases for older components */
+  --bg-color: var(--color-bg);
+  --surface-color: var(--color-surface);
+  --border-color: var(--color-border);
+  --text-secondary: var(--color-text-secondary);
+  --text-primary: var(--color-text-primary);
+  --accent-color: var(--color-accent);
+  --accent-hover: var(--color-accent-hover);
+  --danger-color: var(--color-danger);
+  --success-color: var(--color-success);
+
+  /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
@@ -18,6 +31,7 @@
   --spacing-xl: 40px;
   --spacing-2xl: 64px;
 
+  /* Typography */
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --line-height-body: 1.6;
   --line-height-heading: 1.2;

@@ -1,0 +1,141 @@
+.container {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  user-select: none; /* Prevent blinking cursor around score */
+}
+
+.summary {
+  text-align: center;
+  padding: 40px;
+  background-color: var(--color-surface);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  user-select: none; /* Prevent cursor around score and status */
+}
+
+.scoreCircle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  border: 8px solid var(--color-accent);
+  color: var(--color-text-primary);
+  background-color: white;
+}
+
+.scoreCircle.fail {
+  border-color: var(--color-danger);
+}
+
+.statusText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.pass {
+  color: var(--color-success);
+}
+
+.fail {
+  color: var(--color-danger);
+}
+
+.details {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+.reviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.reviewTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.questionCard {
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  gap: 20px;
+}
+
+.cardIcon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconCorrect {
+  background-color: rgba(22, 163, 74, 0.1);
+  color: var(--color-success);
+}
+
+.iconIncorrect {
+  background-color: rgba(208, 68, 68, 0.1);
+  color: var(--color-danger);
+}
+
+.cardContent {
+  flex: 1;
+}
+
+.questionPrompt {
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 16px;
+  color: var(--color-text-primary);
+}
+
+.answersGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.answerRow {
+  font-size: 0.875rem;
+  display: flex;
+  gap: 8px;
+}
+
+.label {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.value {
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
