@@ -1,0 +1,24 @@
+{
+  "title": "Import Test Quiz",
+  "description": "A quiz to test the import feature.",
+  "questionsCount": 2,
+  "status": "Completed",
+  "timeLimit": 5,
+  "passingScore": 50,
+  "questions": [
+    {
+      "id": "t1",
+      "prompt": "Test Question 1",
+      "choices": ["A", "B", "C"],
+      "correctAnswer": 0,
+      "type": "Multiple Choice"
+    },
+    {
+      "id": "t2",
+      "prompt": "Test Question 2",
+      "choices": ["Yes", "No"],
+      "correctAnswer": 1,
+      "type": "Multiple Choice"
+    }
+  ]
+}

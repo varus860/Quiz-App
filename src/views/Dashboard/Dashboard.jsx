@@ -1,16 +1,17 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import styles from './Dashboard.module.css';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import QuizCard from '../../components/QuizCard/QuizCard';
 import Modal from '../../components/Modal/Modal';
 
-const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz }) => {
+const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz, onExportQuiz, onImportQuiz }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
   const [pendingQuiz, setPendingQuiz] = useState(null);
 
   const filters = ['All', 'Drafts', 'Completed'];
+  const fileInputRef = useRef(null);
 
   const filteredQuizzes = useMemo(() => {
     return quizzes.filter(quiz => {
@@ -22,8 +23,32 @@ const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz }) => {
 
 
   const handleEdit = (quiz) => onEditQuiz(quiz);
-  const handleExport = (quiz) => console.log('Export quiz:', quiz.title);
+  const handleExport = (quiz) => onExportQuiz(quiz);
   const handleDelete = (quiz) => console.log('Delete quiz:', quiz.title);
+  
+  const handleImportClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const json = JSON.parse(e.target.result);
+        onImportQuiz(json);
+      } catch (error) {
+        alert('Failed to parse quiz file. Please ensure it is a valid JSON.');
+      }
+      // Reset input value to allow importing the same file again
+      event.target.value = '';
+    };
+    reader.readAsText(file);
+  };
   const handleStartRequest = (quiz) => setPendingQuiz(quiz);
   const handleConfirmStart = () => {
     if (pendingQuiz) {
@@ -37,7 +62,14 @@ const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz }) => {
       <header className={styles.header}>
         <h1 className={styles.title}>My Quizzes</h1>
         <div className={styles.actions}>
-          <Button variant="outline">Import</Button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            accept=".json"
+            onChange={handleFileChange}
+          />
+          <Button variant="outline" onClick={handleImportClick}>Import</Button>
           <Button variant="primary" onClick={onCreateQuiz}>Create Quiz</Button>
         </div>
       </header>

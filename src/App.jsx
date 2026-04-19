@@ -219,6 +219,38 @@ function App() {
     navigateToDashboard();
   };
 
+  const handleExportQuiz = (quiz) => {
+    const blob = new Blob([JSON.stringify(quiz, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${quiz.title.toLowerCase().replace(/\s+/g, '-')}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportQuiz = (quizData) => {
+    if (!quizData.title || !Array.isArray(quizData.questions)) {
+      alert('Invalid quiz file format.');
+      return;
+    }
+
+    const now = new Date();
+    const formattedDate = now.toLocaleString('en-US', { month: 'short', day: '2-digit' });
+
+    const newQuiz = {
+      ...quizData,
+      id: Math.random().toString(36).substr(2, 9),
+      attempts: 0,
+      updatedAt: formattedDate,
+      status: quizData.status || 'Drafts'
+    };
+
+    setQuizzes(prev => [newQuiz, ...prev]);
+  };
+
   const renderView = () => {
     switch (currentView) {
       case 'dashboard':
@@ -229,6 +261,8 @@ function App() {
               onCreateQuiz={() => navigateToEditor()} 
               onEditQuiz={navigateToEditor}
               onStartQuiz={navigateToRunner}
+              onExportQuiz={handleExportQuiz}
+              onImportQuiz={handleImportQuiz}
             />
           </div>
         );
