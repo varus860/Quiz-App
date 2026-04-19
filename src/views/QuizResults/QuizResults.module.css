@@ -1,38 +1,61 @@
 .container {
-  max-width: 640px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 40px 24px 80px;
+  padding: var(--spacing-lg) var(--spacing-lg) 80px;
+  user-select: none;
+}
+
+.contentLayout {
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  user-select: none; /* Prevent blinking cursor around score */
+  gap: var(--spacing-xl);
+}
+
+@media (min-width: 1024px) {
+  .contentLayout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .summaryWrapper {
+    width: 320px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 40px;
+  }
+
+  .reviewSection {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 .summary {
   text-align: center;
-  padding: 40px;
+  padding: 32px;
   background-color: var(--color-surface);
-  border-radius: 20px;
+  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  user-select: none; /* Prevent cursor around score and status */
+  border: 1px solid var(--color-border);
 }
 
 .scoreCircle {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  border: 8px solid var(--color-accent);
+  border: 4px solid var(--color-accent);
   color: var(--color-text-primary);
-  background-color: white;
+  background-color: var(--color-bg);
+  font-family: var(--font-sans);
 }
 
 .scoreCircle.fail {
@@ -40,10 +63,11 @@
 }
 
 .statusText {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
+  font-family: var(--font-sans);
 }
 
 .pass {
@@ -56,38 +80,50 @@
 
 .details {
   color: var(--color-text-secondary);
-  font-size: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
 }
 
 .reviewSection {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
 .reviewTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .questionCard {
-  background-color: white;
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
   display: flex;
-  gap: 20px;
+  gap: 16px;
 }
 
 .cardIcon {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 2px;
 }
 
 .iconCorrect {
@@ -102,40 +138,45 @@
 
 .cardContent {
   flex: 1;
+  min-width: 0;
 }
 
 .questionPrompt {
+  font-family: var(--font-serif);
   font-weight: 600;
   font-size: 1.125rem;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   color: var(--color-text-primary);
+  line-height: 1.4;
 }
 
 .answersGrid {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .answerRow {
   font-size: 0.875rem;
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .label {
   color: var(--color-text-secondary);
   font-weight: 500;
-  min-width: 100px;
 }
 
 .value {
   color: var(--color-text-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.finishBtn {
+  width: 100%;
 }

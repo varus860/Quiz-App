@@ -11,63 +11,68 @@ const QuizResults = ({ results, onFinish }) => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.summary}>
-        <div className={`${styles.scoreCircle} ${!isPassed ? styles.fail : ''}`}>
-          {score}%
-        </div>
-        <div className={`${styles.statusText} ${isPassed ? styles.pass : styles.fail}`}>
-          {isPassed ? 'Quiz Passed!' : 'Quiz Failed'}
-        </div>
-        <div className={styles.details}>
-          You got {correctCount} out of {totalQuestions} questions correct.
-        </div>
-      </header>
-
-      <section className={styles.reviewSection}>
-        <h3 className={styles.reviewTitle}>Question Review</h3>
-        {quiz.questions.map((question, index) => {
-          const userAnswerIndex = answers[question.id];
-          const isCorrect = userAnswerIndex === question.correctAnswer;
-          
-          return (
-            <div key={question.id} className={styles.questionCard}>
-              <div className={`${styles.cardIcon} ${isCorrect ? styles.iconCorrect : styles.iconIncorrect}`}>
-                {isCorrect ? <Check size={20} /> : <X size={20} />}
-              </div>
-              
-              <div className={styles.cardContent}>
-                <div className={styles.questionPrompt}>
-                  {index + 1}. {question.prompt}
-                </div>
-                
-                <div className={styles.answersGrid}>
-                  <div className={styles.answerRow}>
-                    <span className={styles.label}>Your Answer:</span>
-                    <span className={`${styles.value} ${!isCorrect ? styles.fail : ''}`}>
-                      {userAnswerIndex !== undefined 
-                        ? question.choices[userAnswerIndex] 
-                        : 'No Answer'}
-                    </span>
-                  </div>
-                  {!isCorrect && (
-                    <div className={styles.answerRow}>
-                      <span className={styles.label}>Correct Answer:</span>
-                      <span className={`${styles.value} ${styles.pass}`}>
-                        {question.choices[question.correctAnswer]}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
+      <div className={styles.contentLayout}>
+        <aside className={styles.summaryWrapper}>
+          <header className={styles.summary}>
+            <div className={`${styles.scoreCircle} ${!isPassed ? styles.fail : ''}`}>
+              {score}%
             </div>
-          );
-        })}
-      </section>
+            <div className={`${styles.statusText} ${isPassed ? styles.pass : styles.fail}`}>
+              {isPassed ? 'Passed' : 'Failed'}
+            </div>
+            <div className={styles.details}>
+              {correctCount} / {totalQuestions} Correct
+            </div>
+            <div className={styles.actions}>
+              <Button variant="primary" onClick={onFinish} className={styles.finishBtn}>
+                Finish Quiz
+              </Button>
+            </div>
+          </header>
+        </aside>
 
-      <div className={styles.actions}>
-        <Button variant="primary" onClick={onFinish}>
-          Finish & Return to Dashboard
-        </Button>
+        <section className={styles.reviewSection}>
+          <h3 className={styles.reviewTitle}>Question Review</h3>
+          <div className={styles.questionsList}>
+            {quiz.questions.map((question, index) => {
+              const userAnswerIndex = answers[question.id];
+              const isCorrect = userAnswerIndex === question.correctAnswer;
+              
+              return (
+                <div key={question.id} className={styles.questionCard}>
+                  <div className={`${styles.cardIcon} ${isCorrect ? styles.iconCorrect : styles.iconIncorrect}`}>
+                    {isCorrect ? <Check size={18} /> : <X size={18} />}
+                  </div>
+                  
+                  <div className={styles.cardContent}>
+                    <div className={styles.questionPrompt}>
+                      {index + 1}. {question.prompt}
+                    </div>
+                    
+                    <div className={styles.answersGrid}>
+                      <div className={styles.answerRow}>
+                        <span className={styles.label}>Your:</span>
+                        <span className={`${styles.value} ${!isCorrect ? styles.fail : ''}`}>
+                          {userAnswerIndex !== undefined 
+                            ? question.choices[userAnswerIndex] 
+                            : 'No Answer'}
+                        </span>
+                      </div>
+                      {!isCorrect && (
+                        <div className={styles.answerRow}>
+                          <span className={styles.label}>Correct:</span>
+                          <span className={`${styles.value} ${styles.pass}`}>
+                            {question.choices[question.correctAnswer]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
       </div>
     </div>
   );

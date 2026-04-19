@@ -7,19 +7,16 @@ import Modal from '../../components/Modal/Modal';
 
 const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz, onExportQuiz, onImportQuiz }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState('All');
   const [pendingQuiz, setPendingQuiz] = useState(null);
 
-  const filters = ['All', 'Drafts', 'Completed'];
   const fileInputRef = useRef(null);
 
   const filteredQuizzes = useMemo(() => {
     return quizzes.filter(quiz => {
       const matchesSearch = quiz.title.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesFilter = activeFilter === 'All' || quiz.status === activeFilter;
-      return matchesSearch && matchesFilter;
+      return matchesSearch;
     });
-  }, [quizzes, searchQuery, activeFilter]);
+  }, [quizzes, searchQuery]);
 
 
   const handleEdit = (quiz) => onEditQuiz(quiz);
@@ -75,7 +72,6 @@ const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz, onExportQui
       </header>
 
 
-      <section className={styles.controls}>
         <div className={styles.searchWrapper}>
           <Input
             placeholder="Search quizzes..."
@@ -84,19 +80,6 @@ const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz, onExportQui
             className={styles.searchInput}
           />
         </div>
-        
-        <nav className={styles.filterTabs}>
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              className={`${styles.filterTab} ${activeFilter === filter ? styles.activeFilterTab : ''}`}
-              onClick={() => setActiveFilter(filter)}
-            >
-              {filter}
-            </button>
-          ))}
-        </nav>
-      </section>
 
       <section className={styles.content}>
         {filteredQuizzes.length > 0 ? (
@@ -133,14 +116,36 @@ const Dashboard = ({ quizzes, onCreateQuiz, onEditQuiz, onStartQuiz, onExportQui
       >
         {pendingQuiz && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ borderLeft: '4px solid var(--color-accent)', paddingLeft: '16px' }}>
-              <h2 style={{ fontSize: '1.25rem', margin: '0 0 8px 0' }}>{pendingQuiz.title}</h2>
-              <p style={{ color: 'var(--color-text-secondary)', margin: 0, lineHeight: '1.5' }}>
+            <div style={{ 
+              background: 'var(--color-bg)', 
+              padding: '24px', 
+              borderRadius: 'var(--radius-md)', 
+              border: '1px solid var(--color-border)' 
+            }}>
+              <h2 style={{ 
+                fontSize: '1.5rem', 
+                margin: '0 0 12px 0', 
+                fontFamily: 'var(--font-serif)',
+                color: 'var(--color-text-primary)'
+              }}>{pendingQuiz.title}</h2>
+              <p style={{ 
+                color: 'var(--color-text-secondary)', 
+                margin: 0, 
+                lineHeight: '1.6',
+                fontSize: '1rem'
+              }}>
                 {pendingQuiz.description || 'No description provided.'}
               </p>
             </div>
-            <div style={{ background: 'var(--color-bg)', padding: '12px 16px', borderRadius: '8px', fontSize: '0.875rem' }}>
-              <strong>Rules:</strong> {pendingQuiz.timeLimit} minutes • {pendingQuiz.passingScore}% to pass
+            <div style={{ 
+              background: 'var(--color-bg)', 
+              padding: '12px 16px', 
+              borderRadius: 'var(--radius-sm)', 
+              fontSize: '0.875rem',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-text-primary)'
+            }}>
+              <strong style={{ color: 'var(--color-accent)' }}>Rules:</strong> {pendingQuiz.timeLimit} minutes • {pendingQuiz.passingScore}% to pass
             </div>
           </div>
         )}

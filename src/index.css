@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  /* Design Tokens - Standard Names */
+  /* Design Tokens - Standard Colors */
   --color-bg: #F7FAF6;
   --color-surface: #F0F6EF;
-  --color-border: #E6EDE4;
+  --color-border: #D8E2D4;
   --color-text-secondary: #6B7A6F;
   --color-text-primary: #17221A;
   --color-accent: #4F8A66;
@@ -12,16 +12,11 @@
   --color-danger: #D04444;
   --color-success: #16A34A;
 
-  /* Aliases for older components */
-  --bg-color: var(--color-bg);
-  --surface-color: var(--color-surface);
-  --border-color: var(--color-border);
-  --text-secondary: var(--color-text-secondary);
-  --text-primary: var(--color-text-primary);
-  --accent-color: var(--color-accent);
-  --accent-hover: var(--color-accent-hover);
-  --danger-color: var(--color-danger);
-  --success-color: var(--color-success);
+  /* Typography */
+  --font-serif: 'Spectral', serif;
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --line-height-body: 1.6;
+  --line-height-heading: 1.3;
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -31,10 +26,34 @@
   --spacing-xl: 40px;
   --spacing-2xl: 64px;
 
-  /* Typography */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  --line-height-body: 1.6;
-  --line-height-heading: 1.2;
+  /* Border Radius - Refined/Sharper */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+
+  /* Legacy Aliases (to be replaced) */
+  --bg-color: var(--color-bg);
+  --surface-color: var(--color-surface);
+  --border-color: var(--color-border);
+  --text-secondary: var(--color-text-secondary);
+  --text-primary: var(--color-text-primary);
+  --accent-color: var(--color-accent);
+  --accent-hover: var(--color-accent-hover);
+  --danger-color: var(--color-danger);
+  --success-color: var(--color-success);
+  --font-family: var(--font-sans);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1B241E;
+    --color-surface: #242E27;
+    --color-border: #404F44;
+    --color-text-primary: #E6EDE4;
+    --color-text-secondary: #A1B0A5;
+    --color-accent: #5AA377;
+    --color-accent-hover: #4D8C66;
+  }
 }
 
 * {
@@ -55,22 +74,25 @@ body {
 h1,
 h2,
 h3 {
+  font-family: var(--font-serif);
   line-height: var(--line-height-heading);
   font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 h1 {
-  font-size: 2.0rem;
+  font-size: clamp(1.875rem, 5vw, 2.5rem);
   font-weight: 700;
   margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: clamp(1.4rem, 4vw, 1.875rem);
 }
 
 h3 {
-  font-size: 1.125rem;
+  font-size: clamp(1.125rem, 3vw, 1.35rem);
 }
 
 .secondary-text {
@@ -79,15 +101,9 @@ h3 {
 }
 
 .container {
-  max-width: 960px;
+  max-width: 1024px;
   margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-}
-
-@media (max-width: 640px) {
-  .container {
-    padding: 0 var(--spacing-md);
-  }
+  padding: 0 clamp(var(--spacing-md), 5vw, var(--spacing-2xl));
 }
 
 main {

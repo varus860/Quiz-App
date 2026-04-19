@@ -16,12 +16,12 @@
 .label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .description {
   font-size: 0.75rem;
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
 }
 
 .disabled {
@@ -51,7 +51,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--border-color);
+  background-color: var(--color-border);
   transition: 0.2s;
   border-radius: 22px;
 }
@@ -63,13 +63,14 @@
   width: 16px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  background-color: #FFFFFF;
   transition: 0.2s;
   border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .checkbox:checked + .slider {
-  background-color: var(--accent-color);
+  background-color: var(--color-accent);
 }
 
 .checkbox:focus + .slider {

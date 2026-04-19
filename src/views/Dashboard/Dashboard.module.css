@@ -6,13 +6,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .title {
   margin-bottom: 0;
-  /* Overide the global h1 margin */
+  font-family: var(--font-serif);
 }
 
 .actions {
@@ -37,8 +38,8 @@
 .controls {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .searchWrapper {
@@ -50,14 +51,14 @@
 }
 
 /* Override inputWrapper margin if any */
-.searchInput > div {
+.searchInput>div {
   margin-bottom: 0;
 }
 
 .filterTabs {
   display: flex;
   gap: var(--spacing-lg);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--color-border);
   padding-bottom: 0;
 }
 
@@ -66,20 +67,20 @@
   border: none;
   padding: 0 0 var(--spacing-xs) 0;
   cursor: pointer;
-  font-family: inherit;
-  font-size: 1rem;
-  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
   position: relative;
-  transition: color 0.2s ease;
+  transition: color 0.15s ease;
+  font-weight: 500;
 }
 
 .filterTab:hover {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .activeFilterTab {
-  color: var(--accent-color);
-  font-weight: 500;
+  color: var(--color-text-primary);
 }
 
 .activeFilterTab::after {
@@ -89,20 +90,13 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: var(--accent-color);
+  background-color: var(--color-accent);
 }
 
 .quizGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg);
-}
-
-@media (max-width: 640px) {
-  .quizGrid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-  }
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-md);
 }
 
 .emptyState {
@@ -111,11 +105,12 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-2xl);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   text-align: center;
 }
 
 .emptyTitle {
   margin-bottom: var(--spacing-sm);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-serif);
 }

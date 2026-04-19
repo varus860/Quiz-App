@@ -11,7 +11,7 @@ const QuizCard = ({ quiz, onEdit, onExport, onDelete, onStart }) => {
       <div className={styles.content} onClick={() => onStart(quiz)}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.metadata}>
-          {questionsCount} Questions | {attempts} Attempts | Updated {updatedAt}
+          {quiz.questions ? quiz.questions.length : 0} Questions | {quiz.timeLimit} Min | {quiz.passingScore}% to Pass
         </p>
       </div>
       

@@ -11,7 +11,8 @@
 }
 
 .sectionTitle {
-  font-size: var(--font-size-h3, 1.125rem);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
@@ -25,12 +26,12 @@
 
 .choiceRow {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
 }
 
 .radioWrapper {
-  padding-bottom: 12px; /* Align with input */
+  padding-top: 10px;
 }
 
 .choiceInputWrapper {
@@ -38,18 +39,18 @@
 }
 
 .removeBtn {
-  margin-bottom: 6px;
+  margin-top: 4px;
   color: var(--color-danger);
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: background-color 0.1s ease;
 }
 
 .removeBtn:hover:not(:disabled) {
-  background-color: rgba(208, 68, 68, 0.1);
+  background-color: rgba(208, 68, 68, 0.05);
 }
 
 .removeBtn:disabled {
